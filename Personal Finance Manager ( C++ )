@@ -1,0 +1,119 @@
+#include <iostream>
+#include<fstream>
+using namespace std;
+
+enum Mychoice {
+    AddTransaction = 1,
+    ViewSummary,
+    SaveToFile,
+    Loadfromfile,
+    Exit
+};
+
+    int main() {
+        
+        
+        int finance = 0,type = 0,category = 0;
+        double TotalIncome = 0,TotalExpenses = 0,Balance = 0,
+        Rent = 0,Entertainment = 0,amount = 0,Food = 0;
+        string date;
+        
+        do{
+        cout <<"======Personal Finance Manager=====\n";
+        cout <<"1.Add Transaction\n";
+        cout <<"2.View Summary\n";
+        cout <<"3.Save To File\n";
+        cout <<"4.Load from file\n";
+        cout <<"5.Exit\n";
+        cout <<"Please choose an option:";
+        cin >> finance;
+        Mychoice choice = static_cast<Mychoice>(finance);
+        
+        if(choice < AddTransaction || choice > Exit){
+            cout <<"Invalid choice.Please restart the programme again\n";
+            continue;
+        }
+        
+        switch (choice) {
+            case 1:
+            cout << "\nEnter amount: RM";
+            cin >> amount;
+            if(amount < 0){
+                cout << "Enter Amount: " << amount;
+                cout <<"\nError: Amount cannot be negative.Please try again.\n";
+            }
+            cout << "Enter type (1-Income,2-Expense): ";
+            cin >> type;
+            if(type >= 3){
+                cout << "\nEnter Type (i-Income,2-Expense): " << type;
+                cout << "\nError.Invalid Type.Please Enter 1 or 2.";
+                continue;
+            }
+            cout <<"Enter category (1-Food,2-Rent,3-Entertainment): ";
+            cin >> category;
+            cout <<"Enter date (DD/MM/YY): ";
+            cin >> date;
+            cout <<"transaction added successfully\n !";
+            
+            if(type == 1){
+                TotalIncome += amount;}
+                else if(type == 2){
+                    TotalExpenses += amount;}
+                    
+                    if (type == 2 && category == 1){
+                        Food += amount;}
+                        else if(type == 2 && category == 2){
+                            Rent += amount;}
+                            else if(type == 2 && category == 3){
+                                Entertainment += amount;
+                            }
+
+            break;
+            
+            case 2:
+            cout << "----Monthly Summary----";
+            cout <<"\nTotal Income: RM" << TotalIncome;
+            cout <<"\nTotal Expenses: RM" << TotalExpenses;
+            cout<<"\nBalance: RM";
+            Balance = TotalIncome - TotalExpenses;
+            cout << Balance;
+            cout <<"\nFood: " << Food;
+            cout <<"\nRent: " << Rent;
+            cout <<"\nEntertainment: RM" << Entertainment <<"\n";
+            break;
+            
+            case 3: {
+            ofstream createfile("Finance.Mycheck");
+            if(createfile){
+                createfile << "Total Income: RM" << TotalIncome <<"\n";
+                createfile << "Total Expenses: RM" << TotalExpenses <<"\n";
+                createfile << "Food: RM" << Food <<"\n";
+                createfile << "Rent: RM" << Rent <<"\n";
+                createfile << "Entertainment: RM" << Entertainment << "\n";
+                createfile.close();
+                cout << "Data Saved Successfully!\n "; }
+                
+                else {
+                    cout << "Error saving file!\n";
+                }
+                break;
+            }
+            case 4:
+            ifstream Readfile("Finance.Mycheck");
+            if(Readfile){
+                string output;
+                cout << "Loading data from file......\n";
+            while(getline(Readfile,output)){
+                cout << output <<"\n";
+            }Readfile.close();
+            cout << "Data loaded successfully!";
+            }else{
+                cout <<"Error in loading the data !\n";
+            }
+                break;
+                
+                    }
+            }while(finance != 5);
+            cout << "Thank you for using personal finance manager!\n";
+            cout << "GoodBye!";
+    }
